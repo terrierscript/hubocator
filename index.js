@@ -1,8 +1,25 @@
 var path = require("path");
 var util = require("util");
-var scriptDir = path.dirname(module.filename);
-var coffeePath = path.join(scriptDir,"node_modules/coffee-script/bin/coffee");
-var hubotPath =  path.join(scriptDir,"node_modules/hubot/bin/hubot");
+var fs = require("fs");
+
+var scriptDirs = module.paths.concat();
+var current = scriptDirs.shift();
+scriptDirs.push(current);
+
+// this package's node_module is last resort (only use when can't find other paths)
+var coffeePath;
+var hubotPath;
+scriptDirs.forEach(function(scriptDir){
+  var coffee = path.join(scriptDir,"coffee-script/bin/coffee");
+  var hubot  = path.join(scriptDir,"hubot/bin/hubot");
+  if(!coffeePath && fs.existsSync(coffee)){
+    coffeePath = coffee;
+  }
+  if(!hubotPath && fs.existsSync(hubot)){
+    hubotPath = hubot;
+  }
+})
+
 
 module.exports = function(env, args, options){
   if(typeof env !== "object" || util.isArray(env)){
