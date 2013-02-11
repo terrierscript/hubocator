@@ -4,8 +4,12 @@ Execute hubot only javascript (without shell export).
 ## install
 
 ```
+npm install coffee-script
+npm install hubot
 npm install hubocator
 ```
+This module process executing wrapper and haven't hubot and coffee-script.
+Please install these module.
 
 ## usage
 

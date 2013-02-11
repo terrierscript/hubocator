@@ -1,12 +1,16 @@
 var path = require("path");
 var util = require("util");
 var fs = require("fs");
+var colors = require('colors');
+colors.setTheme({
+  cmd: 'green',
+  error: 'red'
+});
 
 var scriptDirs = module.paths.concat();
 var current = scriptDirs.shift();
 scriptDirs.push(current);
 
-// this package's node_module is last resort (only use when can't find other paths)
 var coffeePath;
 var hubotPath;
 scriptDirs.forEach(function(scriptDir){
@@ -19,6 +23,14 @@ scriptDirs.forEach(function(scriptDir){
     hubotPath = hubot;
   }
 })
+if(!coffeePath){
+  console.error("[Error]".error+" Coffee script is not installed.")
+  console.error("[Error]".error+" Please try "+" $npm install coffee-script".cmd)
+}
+if(!hubotPath){
+  console.error("[Error]".error+" Hubot is not installed.")
+  console.error("[Error]".error+" Please try "+" $npm install hubot".cmd)
+}
 
 
 module.exports = function(env, args, options){
