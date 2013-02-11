@@ -3,6 +3,7 @@ Execute hubot only javascript (without shell export).
 
 *** install
 ```
+npm install hubocator
 ```
 *** usage
 ```javascript

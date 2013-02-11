@@ -1,12 +1,12 @@
 {
   "name": "hubocator",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Call hubot on javascript",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "repository": "",
+  "repository": "git://github.com/suisho/hubocator.git",
   "author": "suisho",
   "license": "BSD",
   "dependencies": {
