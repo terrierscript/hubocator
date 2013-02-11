@@ -1,17 +1,20 @@
-* Hubocator
+# Hubocator
 Execute hubot only javascript (without shell export).
 
-*** install
+## install
+
 ```
 npm install hubocator
 ```
-*** usage
-```javascript
+
+## usage
+
+ ```javascript
 var hubocator = require("hubocator");
 hubocator(); // called hubot
 ```
 
-- environment
+#### environment
 ```javascript
 var hubocator = require("hubocator");
 var env = {
@@ -20,7 +23,7 @@ var env = {
 hubocator(env);
 ```
 
-- args
+#### args
 ```javascript
 var hubocator = require("hubocator");
 var env = {
