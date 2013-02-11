@@ -1,6 +1,6 @@
 {
   "name": "hubocator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Call hubot on javascript",
   "main": "index.js",
   "scripts": {
