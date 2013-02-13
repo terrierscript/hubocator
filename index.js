@@ -23,15 +23,6 @@ scriptDirs.forEach(function(scriptDir){
     hubotPath = hubot;
   }
 })
-if(!coffeePath){
-  console.error("[Error]".error+" Coffee script is not installed.")
-  console.error("[Error]".error+" Please try "+" $npm install coffee-script".cmd)
-}
-if(!hubotPath){
-  console.error("[Error]".error+" Hubot is not installed.")
-  console.error("[Error]".error+" Please try "+" $npm install hubot".cmd)
-}
-
 
 module.exports = function(env, args, options){
   if(typeof env !== "object" || util.isArray(env)){
@@ -50,6 +41,20 @@ module.exports = function(env, args, options){
   }
   if(options.hubotPath){
     hubotPath = options.hubotPath
+  }
+  var err = []
+  if(!coffeePath){
+    err.push("[Error]".error+" Coffee script is not installed.")
+    err.push("[Error]".error+" Please try "+" $npm install coffee-script".cmd)
+  }
+  if(!hubotPath){
+    err.push("[Error]".error+" Hubot is not installed.")
+    err.push("[Error]".error+" Please try "+" $npm install hubot".cmd)
+  }
+  if(err){
+    err.forEach(function(_err){
+      console.error(_err);
+    })
   }
   return module.exports.evocation(env, args, coffeePath, hubotPath);
 }
