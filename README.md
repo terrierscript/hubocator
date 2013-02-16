@@ -40,3 +40,22 @@ hubocator(env,args);
 //or
 hubocator(args);
 ```
+
+`args` can as object if you need
+```javascript
+var hubocator = require("hubocator");
+var env = {
+  "HUBOT_ENVIRONMENT" : "FOO"
+}
+var args = {
+  "-a": "irc"
+}
+hubocator(env,args);
+
+```
+
+#### options
+- coffeePath
+  - coffee script execute path
+- hubotPath
+  - hubot execute path

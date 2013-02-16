@@ -1,5 +1,6 @@
 var path = require("path");
 var util = require("util");
+
 var fs = require("fs");
 var colors = require('colors');
 colors.setTheme({
@@ -25,17 +26,17 @@ scriptDirs.forEach(function(scriptDir){
 })
 
 module.exports = function(env, args, options){
-  if(typeof env !== "object" || util.isArray(env)){
-    args = env;
-    options = args;
-    env = undefined;
-  }
-  env  = env || {};
-  args = args || [];
-  options = options || {}
-  if(typeof args == "string"){
-    args = args.split(" ");
-  }
+
+  
+  var parsed =  parseArgs(env, args, options)
+  env = parsed.env;
+  args = parsed.args;
+  options = parsed.options;
+  
+  var scriptDir = path.dirname(module.filename);
+  var coffeePath = path.join(scriptDir,"node_modules/coffee-script/bin/coffee");
+  var hubotPath =  path.join(scriptDir,"node_modules/hubot/bin/hubot");
+  
   if(options.coffeePath){
     coffeePath = options.coffeePath
   }
@@ -57,10 +58,51 @@ module.exports = function(env, args, options){
     })
   }
   return module.exports.evocation(env, args, coffeePath, hubotPath);
+  var bot = evocation(env, args, coffeePath, hubotPath);
+  
+  // add restart event
+  bot.once("message",function(msg){
+    if(msg != "hubocator_restart"){
+      return
+    }
+    bot.once("exit",function(){
+      var restartBot = evocation(evn, args, coffeePath, hubotPath);
+      return restartBot
+    });
+    bot.kill();
+  });
+  return bot;
 }
 
+var parseArgs = function(env, args, options){
+  if(typeof env !== "object" || util.isArray(env)){
+    options = args;
+    args = env;
+    env = undefined;
+  }
+  env  = env || {};
+  args = args || [];
+  
+  options = options || {}
+  if(typeof args == "string"){
+    args = args.split(" ");
+  }
+  if(typeof args == "object" && !util.isArray(args)){
+    var _args = [];
+    Object.keys(args).forEach(function(key){
+      _args.push(key);
+      _args.push(args[key]);
+    });
+    args = _args;
+  }
+  return {
+    env : env,
+    args : args,
+    options : options
+  }
+}
 
-module.exports.evocation = function(env, args, coffeePath, hubotPath){
+var evocation = function(env, args, coffeePath, hubotPath){
   var fork = require('child_process').fork
   args.unshift(hubotPath);
   var hubot = fork(coffeePath, args, {
