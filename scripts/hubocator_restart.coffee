@@ -6,6 +6,8 @@
 #
 # Author:
 #   suisho
+Util = require "util"
+
 
 module.exports = (robot) ->
   # echo when restart
@@ -23,3 +25,12 @@ module.exports = (robot) ->
   robot.respond /restart/i, (msg) ->
     msg.send "Restart..."
     process.send {HUBOCATOR_CMD : "restart"}
+
+  # show hubocator info
+  robot.respond /show hubocator/i,(msg) ->
+    process.once "message", (_msg) ->
+      info = _msg.HUBOCATOR_INFO
+      if info
+        msg.send Util.inspect info
+    
+    process.send {HUBOCATOR_CMD : "show_info"}
