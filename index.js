@@ -58,7 +58,7 @@ module.exports = function(env, args, options){
      coffeePath : coffeePath,
      hubotPath : hubotPath
   });
-  hubocator.evocation()
+  return hubocator.evocation()
 }
 
 var addEvent = function(process, cmd, eventFunc){
@@ -98,6 +98,7 @@ Hubocator.prototype.hookEvents = function(){
   // info event
   addEvent(bot, "show_info", function(){
     var info = clone(self.opts)
+    delete info.env // security reason
     info.restarted = self.restarted
     info.pid = process.pid
     info.startTime = self.startTime
