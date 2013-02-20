@@ -104,6 +104,7 @@ Hubocator.prototype.hookEvents = function(){
     info.restarted = self.restarted
     info.pid = process.pid
     info.startTime = self.startTime
+    info.hubotPid = bot.pid
     bot.send({
       HUBOCATOR_CMD : "info",
       HUBOCATOR_INFO : info
