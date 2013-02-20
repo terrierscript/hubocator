@@ -19,10 +19,10 @@ This script add function restart hubot through hubocator
 ## Demo
 Demo is [here](https://github.com/suisho/hubocator-demo)
 ```sh
-$ git clone git://github.com/suisho/hubocator-demo.git
-$ cd hubocator-demo
-$ npm install
-$ node example.js
+git clone git://github.com/suisho/hubocator-demo.git
+cd hubocator-demo
+npm install
+node example.js
 ```
 
 - Restarting example
