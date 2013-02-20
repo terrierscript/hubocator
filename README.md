@@ -15,23 +15,6 @@ Please install these module.
 Copy `scripts/hubocator_reset.coffee` to your hubot scripts directory
 This script add function restart hubot through hubocator
 
-## example
-You can try on example.js
-```sh
-$ node example.js
-```
-start hubot when after command.
-
-- If you try restart
-```sh
-hubocator_hubot> hubot restart
-```
-
-- If you confirm
-```sh
-hubocator_hubot> hubot show hubocator
-```
-
 ## usage
 ```javascript
 var hubocator = require("hubocator");
@@ -81,3 +64,19 @@ hubocator(env,args);
   - coffee script execute path
 - hubotPath
   - hubot execute path
+
+## Demo
+You can try on example.js. 
+```sh
+$ node example.js
+```
+
+- Restarting example
+```sh
+hubocator_hubot> hubot restart
+```
+
+- Confirm example
+```sh
+hubocator_hubot> hubot show hubocator
+```
