@@ -1,6 +1,6 @@
 var path = require("path");
 var util = require("util");
-
+var clone = require("clone")
 var fs = require("fs");
 var colors = require('colors');
 colors.setTheme({
@@ -26,8 +26,6 @@ scriptDirs.forEach(function(scriptDir){
 })
 
 module.exports = function(env, args, options){
-
-  
   var parsed =  parseArgs(env, args, options)
   env = parsed.env;
   args = parsed.args;
@@ -57,22 +55,73 @@ module.exports = function(env, args, options){
       console.error(_err);
     })
   }
-  return module.exports.evocation(env, args, coffeePath, hubotPath);
-  var bot = evocation(env, args, coffeePath, hubotPath);
-  
-  // add restart event
-  bot.once("message",function(msg){
-    if(msg != "hubocator_restart"){
-      return
-    }
-    bot.once("exit",function(){
-      var restartBot = evocation(evn, args, coffeePath, hubotPath);
-      return restartBot
-    });
-    bot.kill();
+  var hubocator = new Hubocator({
+     env : env,
+     args : args,
+     coffeePath : coffeePath,
+     hubotPath : hubotPath
   });
-  return bot;
+  hubocator.evocation()
 }
+
+var addEvent = function(process, cmd, eventFunc){
+  process.on("message", function(msg){
+    if(msg.HUBOCATOR_CMD === cmd){
+      eventFunc()
+    }
+  })
+}
+
+var Hubocator =  function(opts){
+  this.opts = clone(opts);
+  this.env = opts.env;
+  this.args = opts.args;
+  this.coffeePath = opts.coffeePath;
+  this.hubotPath = opts.hubotPath;
+  this.restarted = opts.restarted
+}
+Hubocator.prototype.evocation = function(){
+  this.bot = this.fork();
+  this.hookEvents()
+  return this.bot
+}
+
+Hubocator.prototype.hookEvents = function(){
+  var self = this;
+  var bot = this.bot
+  addEvent(bot, "restart", function(){
+    bot.on("exit", function(){
+      var opts = clone(self.opts);
+      opts.restarted = true;
+      var restartBot = new Hubocator(opts)
+      restartBot.evocation();
+    });
+    bot.kill()
+  })
+  // info event
+  addEvent(bot, "show_info", function(){
+    var info = clone(self.opts)
+    info.restarted = self.restarted
+    info.pid = process.pid
+    info.startTime = self.startTime
+    bot.send({
+      HUBOCATOR_CMD : "info",
+      HUBOCATOR_INFO : info
+    })
+  })
+}
+
+Hubocator.prototype.fork = function(){
+  var args = this.args.concat()
+  var fork = require('child_process').fork
+  args.unshift(this.hubotPath);
+  var hubot = fork(this.coffeePath, args, {
+    env : this.env
+  })
+  this.startTime = new Date();
+  return hubot;
+}
+
 
 var parseArgs = function(env, args, options){
   if(typeof env !== "object" || util.isArray(env)){
@@ -84,6 +133,7 @@ var parseArgs = function(env, args, options){
   args = args || [];
   
   options = options || {}
+  // args parsing
   if(typeof args == "string"){
     args = args.split(" ");
   }
@@ -95,6 +145,7 @@ var parseArgs = function(env, args, options){
     });
     args = _args;
   }
+  // return
   return {
     env : env,
     args : args,
@@ -102,11 +153,3 @@ var parseArgs = function(env, args, options){
   }
 }
 
-var evocation = function(env, args, coffeePath, hubotPath){
-  var fork = require('child_process').fork
-  args.unshift(hubotPath);
-  var hubot = fork(coffeePath, args, {
-    env : env
-  })
-  return hubot;
-}
