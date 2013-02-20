@@ -1,12 +1,17 @@
 {
   "name": "hubocator",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Call hubot on javascript",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "keywords" : ["hubot", "wrapper", "reload", "restart"],
+  "keywords": [
+    "hubot",
+    "wrapper",
+    "reload",
+    "restart"
+  ],
   "repository": "git://github.com/suisho/hubocator.git",
   "author": "suisho",
   "license": "BSD",
