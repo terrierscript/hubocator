@@ -1,7 +1,8 @@
 # Hubocator
-Execute hubot only javascript (without shell export).
+Execute hubot wrapper. 
+Only javascript (without shell export) and support restarting hubot.
 
-## install
+## Installation
 
 ```
 npm install coffee-script
@@ -12,22 +13,21 @@ This module process executing wrapper and haven't hubot and coffee-script.
 Please install these module.
 
 ### scripts
-Copy `scripts/hubocator_reset.coffee` to your hubot scripts directory
+Copy [scripts/hubocator_reset.coffee](https://github.com/suisho/hubocator/blob/master/scripts/hubocator_restart.coffee) to your hubot scripts directory
 This script add function restart hubot through hubocator
 
-## example
-You can try on example.js
+## Demo
+You can try on example.js. 
 ```sh
 $ node example.js
 ```
-start hubot when after command.
 
-- If you try restart
+- Restarting example
 ```sh
 hubocator_hubot> hubot restart
 ```
 
-- If you confirm
+- Confirm example
 ```sh
 hubocator_hubot> hubot show hubocator
 ```
