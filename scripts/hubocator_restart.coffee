@@ -21,7 +21,6 @@ hubocatorInfoHook = (hook) ->
   
 module.exports = (robot) ->
   # echo when restart
-  
   hubocatorInfoHook (info) ->
     if info.restarted
       robot.send null,"Restart Done on " + info.startTime

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha"
   },
+  "keywords" : ["hubot", "wrapper", "reload", "restart"],
   "repository": "git://github.com/suisho/hubocator.git",
   "author": "suisho",
   "license": "BSD",
