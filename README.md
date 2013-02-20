@@ -17,8 +17,11 @@ Copy [scripts/hubocator_reset.coffee](https://github.com/suisho/hubocator/blob/m
 This script add function restart hubot through hubocator
 
 ## Demo
-You can try on example.js. 
+Demo is [here](https://github.com/suisho/hubocator-demo)
 ```sh
+$ git clone git://github.com/suisho/hubocator-demo.git
+$ cd hubocator-demo
+$ npm install
 $ node example.js
 ```
 

@@ -31,9 +31,6 @@ module.exports = function(env, args, options){
   args = parsed.args;
   options = parsed.options;
   
-  var scriptDir = path.dirname(module.filename);
-  var coffeePath = path.join(scriptDir,"node_modules/coffee-script/bin/coffee");
-  var hubotPath =  path.join(scriptDir,"node_modules/hubot/bin/hubot");
   
   if(options.coffeePath){
     coffeePath = options.coffeePath
