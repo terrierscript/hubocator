@@ -10,26 +10,35 @@
 # Author:
 #   suisho
 Util = require "util"
-
-hubocatorInfoHook = (hook) ->
+Hubot = require "hubot"
+User = Hubot.User
+hubocatorInfoHook = (callback) ->
   process.once "message", (msg) ->
     if msg.HUBOCATOR_CMD != "info"
       return
     info = msg.HUBOCATOR_INFO
-    hook(info)
+    callback(info)
   process.send {HUBOCATOR_CMD : "show_info"}
   
 module.exports = (robot) ->
+  self = this;
+  @restartUser;
   # echo when restart
-  hubocatorInfoHook (info) ->
+  hubocatorInfoHook (info) =>
     if info.restarted
-      robot.send null,"Restart Done on " + info.startTime
+      try
+        # TODO: cannot replay for some adapters (example: irc)
+        # listen dapter connect and get user
+        robot.send null,"Restart Done on " + info.startTime
+      catch e
+        console.log "[Error] Error: " + e.message
       
   # return pong when hubot is restarted
   process.send {HUBOCATOR_CMD : "show_info"}
 
   # restarting
-  robot.respond /restart/i, (msg) ->
+  robot.respond /restart/i, (msg) =>
+    @restartUser = msg.envelope
     msg.send "Restart..."
     process.send {HUBOCATOR_CMD : "restart"}
 
@@ -38,5 +47,4 @@ module.exports = (robot) ->
     hubocatorInfoHook (info) ->
       if info
         for key, value of info
-          
           msg.send "HUBOCATOR:" +  key + " => " + Util.inspect(value)
