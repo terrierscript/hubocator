@@ -9,6 +9,7 @@
 #
 # Author:
 #   suisho
+
 Util = require "util"
 Hubot = require "hubot"
 User = Hubot.User
@@ -23,23 +24,32 @@ hubocatorInfoHook = (callback) ->
 module.exports = (robot) ->
   self = this;
   @restartUser;
-  # echo when restart
-  hubocatorInfoHook (info) =>
-    if info.restarted
-      try
-        # TODO: cannot replay for some adapters (example: irc)
-        # listen dapter connect and get user
-        robot.send null,"Restart Done on " + info.startTime
-      catch e
-        console.log "[Error] Error: " + e.message
-      
-  # return pong when hubot is restarted
-  process.send {HUBOCATOR_CMD : "show_info"}
+  # echo restart ping.
+  # occured when robot enter and brain is loaded.
+  robot.enter () ->
+    robot.brain.once "save", (msg) ->
+      userId = robot.brain.data.hubocator_restart_order_user_id
+      user = robot.brain.userForId(userId)
+      if not user:
+        return
+      hubocatorInfoHook (info) =>
+        if info.restarted
+          return
+        try
+          robot.send user,"Restart Done on " + info.startTime
+          robot.brain.mergeData {hubocator_restart_order_user_id : undefined}
+          robot.brain.save()
+        catch e
+          console.log "[Error] Error: " + e.message
+      # return pong when hubot is restarted
+      process.send {HUBOCATOR_CMD : "show_info"}
 
   # restarting
-  robot.respond /restart/i, (msg) =>
-    @restartUser = msg.envelope
-    msg.send "Restart..."
+  robot.respond /.*restart.*/i, (msg) =>
+    robot.brain.mergeData {hubocator_restart_order_user_id : msg.envelope.user.id}
+    robot.brain.save()
+    msg.send "Restart!"
+    
     process.send {HUBOCATOR_CMD : "restart"}
 
   # show hubocator info
