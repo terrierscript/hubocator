@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+var nopt = require("nopt")
+var path = require("path")
+var fs = require("fs")
+var hubocator = require("../index.js")
+var readJson = function(path){
+  if(!fs.existsSync(path)){
+    return {};
+  }
+  return JSON.parse(fs.readFileSync(path));
+}
+// TODO: options
+var known = {
+  "a" : [String, null]
+}
+var aliases = {
+  
+}
+
+var parsed = nopt(known, aliases, process.argv, 2);
+
+var hubotDir = parsed.argv.remain[0] || "./"
+
+hubotDir = path.resolve(hubotDir)
+var packageJson = readJson(hubotDir + "/package.json")
+var hubocatorJson = readJson(hubotDir + "/hubocator.json")
+var env = hubocatorJson.env || {}
+var argv = hubocatorJson.argv || {}
+hubocator(env, argv);

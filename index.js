@@ -8,22 +8,8 @@ colors.setTheme({
   error: 'red'
 });
 
-var scriptDirs = module.paths.concat();
-var current = scriptDirs.shift();
-scriptDirs.push(current);
 
-var coffeePath;
-var hubotPath;
-scriptDirs.forEach(function(scriptDir){
-  var coffee = path.join(scriptDir,"coffee-script/bin/coffee");
-  var hubot  = path.join(scriptDir,"hubot/bin/hubot");
-  if(!coffeePath && fs.existsSync(coffee)){
-    coffeePath = coffee;
-  }
-  if(!hubotPath && fs.existsSync(hubot)){
-    hubotPath = hubot;
-  }
-})
+
 
 module.exports = function(env, args, options){
   var parsed =  parseArgs(env, args, options)
@@ -38,6 +24,26 @@ module.exports = function(env, args, options){
   if(options.hubotPath){
     hubotPath = options.hubotPath
   }
+  
+  //var scriptDirs = module.paths.concat(); // TODO: check
+  var scriptDirs = [process.cwd() + "/node_modules"]
+  //var current = scriptDirs.shift();
+  //scriptDirs.push(current);
+  
+  var coffeePath;
+  var hubotPath;
+  scriptDirs.forEach(function(scriptDir){
+    var coffee = path.join(scriptDir,"coffee-script/bin/coffee");
+    var hubot  = path.join(scriptDir,"hubot/bin/hubot");
+    
+    if(!coffeePath && fs.existsSync(coffee)){
+      coffeePath = coffee;
+    }
+    if(!hubotPath && fs.existsSync(hubot)){
+      hubotPath = hubot;
+    }
+  })
+  
   var err = []
   if(!coffeePath){
     err.push("[Error]".error+" Coffee script is not installed.")
@@ -151,4 +157,5 @@ var parseArgs = function(env, args, options){
     options : options
   }
 }
+
 
