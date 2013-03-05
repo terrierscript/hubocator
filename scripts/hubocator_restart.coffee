@@ -33,7 +33,7 @@ module.exports = (robot) ->
       if not user
         return
       hubocatorInfoHook (info) =>
-        if info.restarted
+        if not info.restarted
           return
         try
           robot.send user,"Restart Done on " + info.startTime
