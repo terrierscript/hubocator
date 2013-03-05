@@ -30,7 +30,7 @@ module.exports = (robot) ->
     robot.brain.once "save", (msg) ->
       userId = robot.brain.data.hubocator_restart_order_user_id
       user = robot.brain.userForId(userId)
-      if not user:
+      if not user
         return
       hubocatorInfoHook (info) =>
         if info.restarted
