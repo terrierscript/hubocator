@@ -9,13 +9,6 @@ var readJson = function(path){
   }
   return JSON.parse(fs.readFileSync(path));
 }
-// TODO: options
-var known = {
-  "a" : [String, null]
-}
-var aliases = {
-  
-}
 
 var parsed = nopt(known, aliases, process.argv, 2);
 
@@ -25,5 +18,5 @@ hubotDir = path.resolve(hubotDir)
 var packageJson = readJson(hubotDir + "/package.json")
 var hubocatorJson = readJson(hubotDir + "/hubocator.json")
 var env = hubocatorJson.env || {}
-var argv = hubocatorJson.argv || {}
-hubocator(env, argv);
+var args = hubocatorJson.args || {} // TODO  process.env.HUBOT_ADAPTER
+hubocator(env, args);
