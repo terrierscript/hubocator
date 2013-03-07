@@ -76,6 +76,7 @@ var Hubocator =  function(opts){
   this.coffeePath = opts.coffeePath;
   this.hubotPath = opts.hubotPath;
   this.restarted = opts.restarted
+  
 }
 Hubocator.prototype.evocation = function(){
   this.bot = this.fork();
@@ -86,6 +87,16 @@ Hubocator.prototype.evocation = function(){
 Hubocator.prototype.hookEvents = function(){
   var self = this;
   var bot = this.bot
+  
+  bot.on("exit", function(code){ //hook abend
+    if(!code){
+      return;
+    }
+    var opts = clone(self.opts);
+    opts.abend = true;
+    bot = new Hubocator(opts)
+    bot.evocation();
+  })
   addEvent(bot, "restart", function(){
     bot.on("exit", function(){
       var opts = clone(self.opts);
